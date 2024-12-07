@@ -25,8 +25,9 @@
 ### backend
 
 ```
-cd frontend
+cd backend
 npm install
+npm run migrate:run
 npm start
 ```
 
@@ -38,9 +39,14 @@ npm install
 npm start
 ```
 
-access [localhost:5173](http://localhost:5173)
+Access [localhost:5173](http://localhost:5173)
 
 ---
+
+## Useful commands
+
+Generate migration (backend)
+`npm run migration:generate -- db/migrations/[migration name]`
 
 ## Running tests
 
