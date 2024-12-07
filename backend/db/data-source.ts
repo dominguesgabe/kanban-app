@@ -1,13 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-// export const AppDataSource = new DataSource({
-//   type: 'sqlite',
-//   database: './database/database.sqlite',
-//   entities: ['dist/**/*.entity.js'],
-//   migrations: [join(__dirname, '/migrations/*.ts')],
-//   synchronize: false,
-// });
-
 export const dataSourceOptions: DataSourceOptions = {
   type: 'sqlite',
   database: './database/database.sqlite',
