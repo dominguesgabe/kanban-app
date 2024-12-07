@@ -1,5 +1,6 @@
 import { Board } from 'src/modules/board/entities/board.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { UserBoard } from 'src/modules/user-board/entities/user-board.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,6 +16,9 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Board, (board) => board.user)
-  boards: Board[];
+  @OneToMany(() => Board, (board) => board.owner)
+  ownedBoards: Board[];
+
+  @OneToMany(() => UserBoard, (userBoard) => userBoard.user, { cascade: true })
+  userBoards: UserBoard[];
 }
