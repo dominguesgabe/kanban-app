@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/entities/user.entity';
-import { Board } from './modules/board/entities/board.entity';
-import { AppDataSource } from './data-source';
+import { BoardsModule } from './modules/board/board.module';
+import { UsersModule } from './modules/user/user.module';
+import { dataSourceOptions } from 'db/data-source';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(AppDataSource.options),
-    TypeOrmModule.forFeature([Board, User]),
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UsersModule,
+    BoardsModule,
   ],
 })
 export class AppModule {}
