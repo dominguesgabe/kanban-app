@@ -13,6 +13,7 @@ export class UserBoard {
   @ManyToOne(() => Board, (board) => board.userBoards, { onDelete: 'CASCADE' })
   board: Board;
 
-  @Column({ type: 'enum', enum: ['view', 'edit'], default: 'view' })
-  permission: 'view' | 'edit';
+  //It was not possible to use enum due to sqlite limitations
+  @Column()
+  permission: string;
 }
