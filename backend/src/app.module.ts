@@ -1,19 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/user.entity';
+import { User } from './modules/user/entities/user.entity';
+import { Board } from './modules/board/entities/board.entity';
+import { AppDataSource } from './data-source';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: 'test',
-      entities: [User],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(AppDataSource.options),
+    TypeOrmModule.forFeature([Board, User]),
   ],
 })
 export class AppModule {}

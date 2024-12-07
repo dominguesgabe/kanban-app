@@ -42,6 +42,11 @@ access [localhost:5173](http://localhost:5173)
 
 ---
 
+## Useful commands
+
+Generate migration (backend)
+`npm run typeorm:generate -- [migration name]`
+
 ## Running tests
 
 ...
