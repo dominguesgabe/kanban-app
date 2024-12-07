@@ -16,6 +16,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: false })
+  is_logged: boolean;
+
   @OneToMany(() => Board, (board) => board.owner)
   ownedBoards: Board[];
 
