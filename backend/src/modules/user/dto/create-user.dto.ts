@@ -8,7 +8,6 @@ export class CreateUserDTO {
   @IsEmail()
   email: string;
 
-  //encrypt it for god sake
   @IsString()
   @IsNotEmpty()
   password: string;
