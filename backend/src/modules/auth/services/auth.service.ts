@@ -3,10 +3,14 @@ import * as bcrypt from 'bcryptjs';
 import { UsersRepository } from 'src/modules/user/repositories/user.repository';
 import { LoginDTO } from '../dto';
 import { User } from 'src/modules/user/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
+  ) {}
   private readonly saltRounds = 8;
 
   async login({ email, password }: LoginDTO): Promise<User> {
@@ -26,7 +30,7 @@ export class AuthService {
 
     return {
       ...user,
-      is_logged: true,
+      // is_logged: true,
     };
   }
 
