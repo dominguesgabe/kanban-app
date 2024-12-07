@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UpdateResult } from 'typeorm';
+import { User } from 'src/modules/user/entities/user.entity';
 import { LoginDTO } from '../dto';
 import { AuthService } from '../services/auth.service';
 
@@ -8,7 +8,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  login(@Body() loginDTO: LoginDTO): Promise<UpdateResult> {
+  login(@Body() loginDTO: LoginDTO): Promise<User> {
     return this.authService.login(loginDTO);
   }
 

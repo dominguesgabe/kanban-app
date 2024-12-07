@@ -2,13 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { UsersRepository } from 'src/modules/user/repositories/user.repository';
 import { LoginDTO } from '../dto';
+import { User } from 'src/modules/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersRepository: UsersRepository) {}
   private readonly saltRounds = 8;
 
-  async login({ email, password }: LoginDTO) {
+  async login({ email, password }: LoginDTO): Promise<User> {
     const user = await this.usersRepository.findOneBy({ email });
 
     if (!user) {
@@ -21,12 +22,17 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    return await this.usersRepository.update(user.id, { is_logged: true });
+    await this.usersRepository.update(user.id, { is_logged: true });
+
+    return {
+      ...user,
+      is_logged: true,
+    };
   }
 
-  // async logout() {
-  //   return await this.usersRepository.update({ is_logged: false });
-  // }
+  async logout() {
+    return 'should logout';
+  }
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(this.saltRounds);
