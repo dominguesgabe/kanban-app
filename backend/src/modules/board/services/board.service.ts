@@ -10,7 +10,7 @@ import { UserBoardsRepository } from 'src/modules/user-board/repositories/user-b
 
 interface CreateProps {
   createBoardDTO: CreateBoardDTO;
-  email: string;
+  userId: number;
 }
 
 @Injectable()
@@ -24,9 +24,9 @@ export class BoardsService {
     private userBoardsRepository: UserBoardsRepository,
   ) {}
 
-  async create({ createBoardDTO, email }: CreateProps): Promise<any> {
+  async create({ createBoardDTO, userId }: CreateProps): Promise<any> {
     const ownerUser = await this.usersRepository.findOneBy({
-      email,
+      id: userId,
     });
 
     const board = this.boardsRepository.create({
@@ -55,8 +55,20 @@ export class BoardsService {
     return board;
   }
 
-  findAll(): Promise<Board[]> {
-    return this.boardsRepository.find();
+  async findAll(userId: number): Promise<UserBoard[]> {
+    //try again to move this query to userBoards repository
+    const boards = await this.userBoardsRepository
+      .createQueryBuilder('user_board')
+      .leftJoinAndMapOne(
+        'user_board.board',
+        'board',
+        'board',
+        'board.id = user_board.boardId',
+      )
+      .where('user_board.userId = :userId', { userId })
+      .getMany();
+
+    return boards;
   }
 
   findOne(id: number): Promise<Board | null> {
