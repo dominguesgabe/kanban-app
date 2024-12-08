@@ -6,9 +6,4 @@ import { CreateBoardDTO } from '../dto';
 @Controller('boards')
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
-
-  // @Post()
-  // async create(@Body() createBoardDto: CreateBoardDTO): Promise<Board> {
-  //   return this.boardsService.create(createBoardDto);
-  // }
 }

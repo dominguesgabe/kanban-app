@@ -11,8 +11,6 @@ export class BoardsService {
     private boardsRepository: BoardsRepository,
   ) {}
 
-  // async create(boardDTO: CreateBoardDTO): Promise<Board> {}
-
   findAll(): Promise<Board[]> {
     return this.boardsRepository.find();
   }
