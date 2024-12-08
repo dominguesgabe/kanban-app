@@ -6,6 +6,7 @@ import { dataSourceOptions } from 'db/data-source';
 import { UserBoardsModule } from './modules/user-board/user-board.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BoardColumnsModule } from './modules/board-column/board.module';
+import { SessionModule } from './modules/session/session.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { BoardColumnsModule } from './modules/board-column/board.module';
     UserBoardsModule,
     AuthModule,
     BoardColumnsModule,
+    SessionModule,
   ],
 })
 export class AppModule {}

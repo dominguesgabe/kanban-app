@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/user.service';
 import { CreateUserDTO } from '../dto';
 import { User } from '../entities/user.entity';
+import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -14,6 +15,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   findById(@Param() { id }: { id: number }): Promise<User | null> {
     return this.usersService.findById(id);
