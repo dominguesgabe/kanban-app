@@ -23,6 +23,8 @@ export class UsersService {
       password: encryptedPassword,
     });
 
+    // handle userDTO.has_example_board
+
     await this.usersRepository.save(createdUser);
 
     const { password, ...createdUserWithoutPassword } = createdUser;

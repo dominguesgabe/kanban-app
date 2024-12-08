@@ -2,23 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from '../entities/board.entity';
 import { BoardsRepository } from '../repositories/board.repository';
+import { CreateBoardDTO } from '../dto';
 
 @Injectable()
 export class BoardsService {
   constructor(
     @InjectRepository(Board)
-    private usersRepository: BoardsRepository,
+    private boardsRepository: BoardsRepository,
   ) {}
 
   findAll(): Promise<Board[]> {
-    return this.usersRepository.find();
+    return this.boardsRepository.find();
   }
 
   findOne(id: number): Promise<Board | null> {
-    return this.usersRepository.findOneBy({ id });
+    return this.boardsRepository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+    await this.boardsRepository.delete(id);
   }
 }
