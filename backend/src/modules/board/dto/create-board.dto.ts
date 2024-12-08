@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 
 export class CreateBoardDTO {
-  @IsNotEmpty()
-  @IsString()
-  name: string;
+  @IsOptional()
+  @Transform(({ value }) => value ?? 'New board')
+  name?: string;
 }
