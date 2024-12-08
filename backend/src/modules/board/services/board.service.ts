@@ -4,6 +4,9 @@ import { UsersRepository } from 'src/modules/user/repositories/user.repository';
 import { CreateBoardDTO } from '../dto';
 import { Board } from '../entities/board.entity';
 import { BoardsRepository } from '../repositories/board.repository';
+import { User } from 'src/modules/user/entities/user.entity';
+import { UserBoard } from 'src/modules/user-board/entities/user-board.entity';
+import { UserBoardsRepository } from 'src/modules/user-board/repositories/user-boards.repository';
 
 interface CreateProps {
   createBoardDTO: CreateBoardDTO;
@@ -15,7 +18,10 @@ export class BoardsService {
   constructor(
     @InjectRepository(Board)
     private boardsRepository: BoardsRepository,
+    @InjectRepository(User)
     private usersRepository: UsersRepository,
+    @InjectRepository(UserBoard)
+    private userBoardsRepository: UserBoardsRepository,
   ) {}
 
   async create({ createBoardDTO, email }: CreateProps): Promise<any> {
@@ -23,18 +29,30 @@ export class BoardsService {
       email,
     });
 
-    const createdBoard = this.boardsRepository.create({
+    const board = this.boardsRepository.create({
       ...createBoardDTO,
       owner: ownerUser,
     });
 
-    if (!createdBoard) {
+    if (!board) {
       throw new BadRequestException();
     }
 
-    await this.boardsRepository.save(createdBoard);
+    await this.boardsRepository.save(board);
 
-    return createdBoard;
+    const userBoard = this.userBoardsRepository.create({
+      user: ownerUser,
+      board,
+      permission: 'owner',
+    });
+
+    if (!userBoard) {
+      throw new BadRequestException();
+    }
+
+    await this.userBoardsRepository.save(userBoard);
+
+    return board;
   }
 
   findAll(): Promise<Board[]> {
