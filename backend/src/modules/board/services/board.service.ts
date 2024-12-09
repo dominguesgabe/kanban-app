@@ -66,7 +66,6 @@ export class BoardsService {
   }
 
   async findAll(userId: number): Promise<Board[]> {
-    //try again to move this query to userBoards repository
     const boards = await this.boardsRepository
       .createQueryBuilder('board')
       .innerJoin('board.userBoards', 'user_board')
@@ -102,12 +101,10 @@ export class BoardsService {
   }
 
   async delete(id: number): Promise<void> {
-    //validate if user can delete board
     await this.boardsRepository.delete({ id });
   }
 
   async update(id: number, updateBoardDTO: UpdateBoardDTO): Promise<Board> {
-    //validate if user can delete board
     const board = await this.boardsRepository.findOne({
       where: { id },
     });
