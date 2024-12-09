@@ -21,7 +21,7 @@ export class UserBoard {
   @JoinColumn({ name: 'boardId' })
   board: Board;
 
-  //It was not possible to use enum due to sqlite limitations
+  //change to enum
   @Column()
   permission: string;
 }
