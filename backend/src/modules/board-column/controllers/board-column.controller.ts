@@ -34,7 +34,6 @@ export class BoardColumnsController {
     return this.boardColumnsService.findAll(boardId);
   }
 
-  //not working
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(
