@@ -10,15 +10,17 @@ export class UpdateColumnItemDTO {
   @IsOptional()
   description: string;
 
-  @IsNumber()
-  @IsOptional()
-  position: number;
-
-  @IsNumber()
-  @IsOptional()
-  columnId: number;
-
   @IsString()
   @IsOptional()
   priority: Priority;
+}
+
+export class MoveColumnItemDTO {
+  @IsNumber()
+  @IsOptional()
+  targetColumnId: number;
+
+  @IsNumber()
+  @IsOptional()
+  newPosition: number;
 }

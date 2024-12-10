@@ -11,7 +11,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
-import { CreateColumnItemDTO, UpdateColumnItemDTO } from '../dto';
+import {
+  CreateColumnItemDTO,
+  MoveColumnItemDTO,
+  UpdateColumnItemDTO,
+} from '../dto';
 import { ColumnItemsService } from '../services/column-item.service';
 import { ColumnItem } from '../entities/column-item.entity';
 
@@ -40,6 +44,14 @@ export class ColumnItemsController {
     @Body() updateColumnItemDTO: UpdateColumnItemDTO,
   ): Promise<ColumnItem> {
     return this.columnItemsService.update(id, updateColumnItemDTO);
+  }
+
+  @Post('/:id/move')
+  async moveItem(
+    @Param('id') itemId: number,
+    @Body() { targetColumnId, newPosition }: MoveColumnItemDTO,
+  ) {
+    await this.columnItemsService.moveItem(itemId, targetColumnId, newPosition);
   }
 
   @UseGuards(AuthGuard)
