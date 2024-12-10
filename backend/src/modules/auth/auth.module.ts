@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AuthService } from './services/auth.service';
-import { AuthController } from './controllers/auth.controller';
-import { UsersModule } from '../user/user.module';
-import { SessionModule } from '../session/session.module';
-import { SessionRepository } from '../session/repositories/session.repository';
 import { JwtModule } from '@nestjs/jwt';
+import { SessionRepository } from '../session/repositories/session.repository';
+import { SessionModule } from '../session/session.module';
+import { UsersModule } from '../user/user.module';
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
 
 @Module({
   imports: [

@@ -1,11 +1,20 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Priority } from '../enums';
 
-export class BoardColumnDTO {
+export class CreateColumnItemDTO {
+  @IsNumber()
+  @IsNotEmpty()
+  columnId: number;
+
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  boardId: number;
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  priority: Priority;
 }

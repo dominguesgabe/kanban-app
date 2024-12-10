@@ -1,7 +1,24 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Priority } from '../enums';
 
-export class UpdateBoardColumnDTO {
+export class UpdateColumnItemDTO {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   name: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsNumber()
+  @IsOptional()
+  position: number;
+
+  @IsNumber()
+  @IsOptional()
+  columnId: number;
+
+  @IsString()
+  @IsOptional()
+  priority: Priority;
 }

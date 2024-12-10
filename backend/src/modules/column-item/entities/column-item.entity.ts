@@ -17,13 +17,11 @@ export class ColumnItem {
   position: number;
 
   @Column({
+    type: 'text',
     default: Priority.MEDIUM,
   })
   priority: Priority;
 
-  @ManyToOne(() => BoardColumn, (boardColumn) => boardColumn.id, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => BoardColumn, (boardColumn) => boardColumn.columnItems)
   column: BoardColumn;
 }

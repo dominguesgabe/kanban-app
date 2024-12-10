@@ -37,7 +37,7 @@ export class BoardColumnsService {
   async findAll({ boardId }: { boardId: number }): Promise<BoardColumn[]> {
     const columns = await this.boardColumnRepository.find({
       where: { board: { id: boardId } },
-      relations: ['board'],
+      relations: ['board', 'columnItems'],
     });
 
     return columns;
