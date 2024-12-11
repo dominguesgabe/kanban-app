@@ -1,13 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class TableColumnDTO {
+export class UpdateBoardColumnDTO {
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  boardId: string;
-
-  //increment
 }

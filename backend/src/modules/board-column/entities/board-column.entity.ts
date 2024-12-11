@@ -1,5 +1,12 @@
 import { Board } from 'src/modules/board/entities/board.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ColumnItem } from 'src/modules/column-item/entities/column-item.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class BoardColumn {
@@ -14,4 +21,7 @@ export class BoardColumn {
     onDelete: 'CASCADE',
   })
   board: Board;
+
+  @OneToMany(() => ColumnItem, (columnItem) => columnItem.column)
+  columnItems: ColumnItem[];
 }

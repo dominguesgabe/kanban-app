@@ -1,5 +1,4 @@
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDTO {
   @IsNotEmpty()
@@ -12,8 +11,4 @@ export class CreateUserDTO {
   @IsString()
   @IsNotEmpty()
   password: string;
-
-  @IsBoolean()
-  @Transform(({ value }) => value ?? true)
-  has_example_board?: boolean;
 }
