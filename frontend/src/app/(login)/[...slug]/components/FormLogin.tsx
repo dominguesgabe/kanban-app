@@ -1,8 +1,8 @@
 "use client"
 
-import Link from "next/link";
-import { Route } from "@/src/internals/enums";
 import { FormFieldError, Input } from "@/src/components";
+import { Route } from "@/src/internals/enums";
+import Link from "next/link";
 import { useLogin } from "../hooks/useLogin";
 
 export function FormLogin() {
@@ -10,7 +10,8 @@ export function FormLogin() {
     register,
     handleSubmit,
     onSubmit,
-    errors
+    errors,
+    isPending
   } = useLogin()
 
   return (
@@ -44,7 +45,7 @@ export function FormLogin() {
           type="submit"
           className="bg-cyan-500 hover:bg-cyan-400 transition text-white p-2 rounded font-semibold"
         >
-          Login
+          {isPending ? "Loading..." : "Login"}
         </button>
       </form>
       <Link

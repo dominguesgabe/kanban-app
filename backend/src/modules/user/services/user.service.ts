@@ -19,7 +19,7 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException('User email already exists');
     }
 
     const encryptedPassword = await this.authService.hashPassword(
