@@ -28,6 +28,7 @@
 cd backend
 npm install
 npm run migrate:run
+npm run build
 npm start
 ```
 
@@ -36,6 +37,7 @@ npm start
 ```
 cd frontend
 npm install
+npm run build
 npm start
 ```
 
