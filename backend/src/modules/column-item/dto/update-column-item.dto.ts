@@ -17,10 +17,8 @@ export class UpdateColumnItemDTO {
 
 export class MoveColumnItemDTO {
   @IsNumber()
-  @IsOptional()
   targetColumnId: number;
 
   @IsNumber()
-  @IsOptional()
   newPosition: number;
 }

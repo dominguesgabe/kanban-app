@@ -69,11 +69,14 @@ export class ColumnItemsService {
     return updatedItem;
   }
 
-  async moveItem(itemId: number, targetColumnId: number, newPosition: number) {
+  async moveItem(
+    itemId: number,
+    targetColumnId: number,
+    newPosition: number,
+  ): Promise<void> {
     const item = await this.columnItemsRepository.findOne({
       where: { id: itemId },
     });
-
     if (!item) {
       throw new NotFoundException(`Item with id ${itemId} not found`);
     }
@@ -85,22 +88,23 @@ export class ColumnItemsService {
 
     if (!targetColumn) {
       throw new NotFoundException(
-        `Board Column with id ${targetColumnId} not found`,
+        `Target column with id ${targetColumnId} not found`,
       );
     }
 
-    const items = targetColumn.columnItems;
-    const itemIndex = items.findIndex((i) => i.id === itemId);
+    item.column = targetColumn;
+    item.position = newPosition;
+    await this.columnItemsRepository.save(item);
 
-    if (itemIndex === -1) {
-      throw new NotFoundException(`Item with id ${itemId} not found in column`);
-    }
-
-    items.splice(itemIndex, 1);
-    items.splice(newPosition, 0, item);
-
-    items.forEach(async (i, index) => {
-      await this.columnItemsRepository.update(i.id, { position: index });
+    const items = await this.columnItemsRepository.find({
+      where: { column: { id: targetColumnId } },
+      order: { position: 'ASC' },
     });
+
+    items.forEach((itm, index) => {
+      itm.position = index + 1;
+    });
+
+    await this.columnItemsRepository.save(items);
   }
 }

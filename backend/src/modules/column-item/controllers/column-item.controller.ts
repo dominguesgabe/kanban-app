@@ -46,7 +46,7 @@ export class ColumnItemsController {
     return this.columnItemsService.update(id, updateColumnItemDTO);
   }
 
-  @Post('/:id/move')
+  @Patch('/:id/move')
   async moveItem(
     @Param('id') itemId: number,
     @Body() { targetColumnId, newPosition }: MoveColumnItemDTO,
