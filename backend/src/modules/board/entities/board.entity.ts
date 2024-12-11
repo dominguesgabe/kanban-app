@@ -16,9 +16,6 @@ export class Board {
   @Column()
   name: string;
 
-  @Column()
-  content: string;
-
   @ManyToOne(() => User, (user) => user.ownedBoards, {
     nullable: false,
     onDelete: 'CASCADE',

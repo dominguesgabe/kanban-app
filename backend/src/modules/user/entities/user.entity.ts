@@ -1,6 +1,13 @@
 import { Board } from 'src/modules/board/entities/board.entity';
 import { UserBoard } from 'src/modules/user-board/entities/user-board.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Session } from 'src/modules/session/entities/session.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -10,7 +17,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -21,4 +28,7 @@ export class User {
 
   @OneToMany(() => UserBoard, (userBoard) => userBoard.user, { cascade: true })
   userBoards: UserBoard[];
+
+  @OneToOne(() => Session, (session) => session.user)
+  session: Session;
 }
