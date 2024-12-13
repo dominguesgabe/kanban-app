@@ -1,4 +1,4 @@
-import { Column, DraggableData, ITask } from "@/src/types";
+import { DraggableData } from "@/src/types";
 import {
   Active,
   DataRef,
@@ -12,118 +12,133 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { api } from "../../adapters/api";
-import { ApiRoute, BoardColumn } from "../../enums";
+import { ApiRoute } from "../../enums";
+import { useToast } from "../useToast";
+import { AxiosError } from "axios";
+import { useQuery } from "react-query";
+import { Board, BoardColumn, ColumnTask } from "@/src/types/KanbanBoard";
+import { removeIdPrefix } from "@/src/lib/utils";
+
+const exampleTasks: ColumnTask[] = [
+  {
+    id: 1,
+    position: 1,
+    columnId: "done",
+    description: "Project initiation and planning",
+    name: "task1",
+    priority: "low",
+  },
+  {
+    id: 2,
+    position: 2,
+    columnId: "done",
+    description: "Gather requirements from stakeholders",
+    name: "task2",
+    priority: "medium",
+  },
+  {
+    id: 3,
+    position: 3,
+    columnId: "done",
+    description: "Create wireframes and mockups",
+    name: "task3",
+    priority: "medium",
+  },
+  {
+    id: 4,
+    position: 1,
+    columnId: "in-progress",
+    description: "Develop homepage layout",
+    name: "task4",
+    priority: "high",
+  },
+  {
+    id: 5,
+    position: 2,
+    columnId: "in-progress",
+    description: "Design color scheme and typography",
+    name: "task5",
+    priority: "high",
+  },
+  {
+    id: 6,
+    position: 1,
+    columnId: "todo",
+    description: "Implement user authentication",
+    name: "task6",
+    priority: "low",
+  },
+  {
+    id: 7,
+    position: 2,
+    columnId: "todo",
+    description: "Build contact us page",
+    name: "task7",
+    priority: "low",
+  },
+  {
+    columnId: "todo",
+    id: 8,
+    name: "task8",
+    priority: "low",
+    position: 3,
+    description: "Create product catalog",
+  },
+];
 
 const defaultCols = [
   {
     id: "todo" as const,
-    title: "Todo",
+    name: "Todo",
   },
   {
     id: "in-progress" as const,
-    title: "In progress",
+    name: "In progress",
   },
   {
     id: "done" as const,
-    title: "Done",
+    name: "Done",
   },
-] satisfies Column[];
+] satisfies BoardColumn[];
 
 export type ColumnId = (typeof defaultCols)[number]["id"];
 
-const exampleTasks: ITask[] = [
-  {
-    id: "task1",
-    columnId: "done",
-    content: "Project initiation and planning",
-  },
-  {
-    id: "task2",
-    columnId: "done",
-    content: "Gather requirements from stakeholders",
-  },
-  {
-    id: "task3",
-    columnId: "done",
-    content: "Create wireframes and mockups",
-  },
-  {
-    id: "task4",
-    columnId: "in-progress",
-    content: "Develop homepage layout",
-  },
-  {
-    id: "task5",
-    columnId: "in-progress",
-    content: "Design color scheme and typography",
-  },
-  {
-    id: "task6",
-    columnId: "todo",
-    content: "Implement user authentication",
-  },
-  {
-    id: "task7",
-    columnId: "todo",
-    content: "Build contact us page",
-  },
-  {
-    id: "task8",
-    columnId: "todo",
-    content: "Create product catalog",
-  },
-  {
-    id: "task9",
-    columnId: "todo",
-    content: "Develop about us page",
-  },
-  {
-    id: "task10",
-    columnId: "todo",
-    content: "Optimize website for mobile devices",
-  },
-  {
-    id: "task11",
-    columnId: "todo",
-    content: "Integrate payment gateway",
-  },
-  {
-    id: "task12",
-    columnId: "todo",
-    content: "Perform testing and bug fixing",
-  },
-  {
-    id: "task13",
-    columnId: "todo",
-    content: "Launch website and deploy to server",
-  },
-];
+async function getBoard(boardId: string) {
+  const { data } = await api.get<Board>(`${ApiRoute.boards}/${boardId}`);
+  return data;
+}
 
-export const useKanban = ({ boardId }: { boardId: number }) => {
-  async function getBoard({ boardId }: { boardId: number }) {
-    const { data } = await api.get<BoardColumn[]>(
-      `${ApiRoute.columns}/${boardId}`
-    );
-    return data;
-  }
+export const useKanban = ({ boardId }: { boardId: string }) => {
+  const { toast } = useToast();
 
-  const { data: board, isLoading: isLoadingBoard } = useQuery({
-    queryKey: ["board", boardId],
-    queryFn: () => getBoard({ boardId }),
-  });
+  const [columns, setColumns] = useState<BoardColumn[]>(() => defaultCols);
+  const [tasks, setTasks] = useState<ColumnTask[]>(() => exampleTasks);
 
-  const [columns, setColumns] = useState<Column[]>(() => defaultCols);
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
     [columns]
   );
 
-  const [tasks, setTasks] = useState<ITask[]>(() => exampleTasks);
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-  const [activeTask, setActiveTask] = useState<ITask | null>(null);
+  const [activeColumn, setActiveColumn] = useState<BoardColumn | null>(null);
+  const [activeTask, setActiveTask] = useState<ColumnTask | null>(null);
+
+  const { data: board } = useQuery({
+    queryKey: ["board", boardId],
+    queryFn: () => getBoard(boardId),
+    onSuccess: (data: Board) => {
+      setColumns(data.columns);
+      setTasks(data.tasks);
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -171,11 +186,11 @@ export const useKanban = ({ boardId }: { boardId: number }) => {
 
     if (!hasDraggableData(active)) return;
 
-    // moved item
+    // moved column
     const activeData = active.data.current;
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = removeIdPrefix(active.id);
+    const overId = removeIdPrefix(over.id);
 
     if (activeId === overId) return;
 
@@ -197,8 +212,8 @@ export const useKanban = ({ boardId }: { boardId: number }) => {
 
     if (!over) return;
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = removeIdPrefix(active.id);
+    const overId = removeIdPrefix(over.id);
 
     if (activeId === overId) return;
 
@@ -232,7 +247,13 @@ export const useKanban = ({ boardId }: { boardId: number }) => {
           return arrayMove(prevTasks, activeTaskIndex, overTaskIndex - 1);
         }
 
-        return arrayMove(prevTasks, activeTaskIndex, overTaskIndex);
+        const movedTaskToSameCol = arrayMove(
+          prevTasks,
+          activeTaskIndex,
+          overTaskIndex
+        );
+        console.log("movedTaskToSameCol: ", movedTaskToSameCol);
+        return movedTaskToSameCol;
       });
     }
 
@@ -247,7 +268,7 @@ export const useKanban = ({ boardId }: { boardId: number }) => {
         const activeTask = tasks[activeTaskIndex];
 
         if (activeTask) {
-          activeTask.columnId = overId as ColumnId;
+          activeTask.columnId = overId;
           return arrayMove(prevTasks, activeTaskIndex, activeTaskIndex);
         }
 
@@ -266,5 +287,6 @@ export const useKanban = ({ boardId }: { boardId: number }) => {
     onDragEnd,
     onDragOver,
     tasks,
+    board,
   };
 };

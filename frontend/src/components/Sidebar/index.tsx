@@ -1,14 +1,18 @@
 "use client"
 
 import { api } from "@/src/internals/adapters/api";
-import { ApiRoute, Board, Route } from "@/src/internals/enums";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ApiRoute, Route } from "@/src/internals/enums";
+import { useToast } from "@/src/internals/hooks";
+import { Board } from "@/src/types/KanbanBoard/create-board";
+import { AxiosError } from "axios";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export function Sidebar() {
+  const { toast } = useToast()
   const queryClient = useQueryClient()
   const pathname = usePathname()
   const boardId = Number(pathname.split("/").pop())
@@ -23,19 +27,30 @@ export function Sidebar() {
     },
   })
 
+  async function mutationFn() {
+    const { data } = await api.post<Board>(ApiRoute.boards, {
+      name: "New board",
+    })
+    return data
+  }
+
   const {
-    mutate: createBoard,
+    mutate: handleCreateBoard,
   } = useMutation({
-    mutationFn: async () => {
-      const { data } = await api.post<Board>(ApiRoute.boards, {
-        name: "New board",
-      })
-      return data
+    mutationFn,
+    onSuccess: (data) => {
+      queryClient.setQueryData<Board[]>(["boards"], (prevBoards) => {
+        return prevBoards ? [...prevBoards, data] : [data];
+      });
     },
-    onSuccess: (data) => queryClient.setQueryData<Board[]>(["boards"], (prevBoards) => {
-      return prevBoards ? [...prevBoards, data] : [data];
-    }),
-  })
+    onError: (error: AxiosError) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <aside
@@ -49,7 +64,7 @@ export function Sidebar() {
         priority
       />
       <button
-        onClick={() => createBoard()}
+        onClick={() => handleCreateBoard()}
         className="bg-cyan-400 hover:bg-cyan-300 transition text-white rounded-lg font-semibold flex gap-4 p-3 justify-center items-center"
       >
         New board

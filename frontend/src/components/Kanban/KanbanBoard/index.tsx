@@ -8,10 +8,11 @@ import { BoardColumn } from "../BoardColumn";
 import { BoardContainer } from "../BoardContainer";
 import { TaskCard } from "../TaskCard";
 
-export function KanbanBoard({ boardId }: { boardId: number }) {
+export function KanbanBoard({ boardId }: { boardId: string }) {
 
   const {
     columns,
+    tasks,
     columnsId,
     activeColumn,
     activeTask,
@@ -19,12 +20,12 @@ export function KanbanBoard({ boardId }: { boardId: number }) {
     onDragStart,
     onDragEnd,
     onDragOver,
-    tasks,
+    board
   } = useKanban({ boardId })
 
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="font-semibold text-2xl text-gray-700">kanban name</h1>
+      <h1 className="font-semibold text-2xl text-gray-700">{board?.name}</h1>
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}

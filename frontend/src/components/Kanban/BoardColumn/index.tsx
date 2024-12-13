@@ -1,18 +1,18 @@
 "use client"
 
-import { Column, ColumnDragData, ITask } from "@/src/types";
+import { BoardColumn as IBoardColumn, ColumnDragData, ColumnTask } from "@/src/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
-import { useMemo } from "react";
-import { Task, TaskContent, TaskHeader } from "../Task";
-import { Button } from "../../Button";
 import { GripVertical } from "lucide-react";
+import { useMemo } from "react";
+import { Button } from "../../Button";
+import { Task, TaskContent, TaskHeader } from "../Task";
 import { TaskCard } from "../TaskCard";
 
 interface BoardColumnProps {
-  column: Column;
-  tasks: ITask[];
+  column: IBoardColumn;
+  tasks: ColumnTask[];
   isOverlay?: boolean;
 }
 
@@ -27,10 +27,10 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
     transition,
     isDragging,
   } = useSortable({
-    id: column.id,
+    id: `column-${column.id}`,
     data: { type: "column", column } satisfies ColumnDragData,
     attributes: {
-      roleDescription: `Column ${column.title}`,
+      roleDescription: `Column ${column.name}`,
     }
   })
 
@@ -63,7 +63,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
       <TaskHeader
         className="p-4 font-semibold rounded-t-lg bg-cyan-400 text-white border border-b-2 text-left flex flex-row justify-between items-center"
       >
-        <span>{column.title}</span>
+        <span>{column.name}</span>
         <Button
           variant={"ghost"}
           {...attributes}

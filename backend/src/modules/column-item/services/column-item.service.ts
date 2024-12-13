@@ -31,7 +31,7 @@ export class ColumnItemsService {
       description: createColumnItemDTO.description,
       priority: createColumnItemDTO.priority,
       column: boardColumn,
-      position: boardColumn.columnItems.length,
+      position: boardColumn.tasks.length,
     });
 
     await this.columnItemsRepository.save(columnItem);

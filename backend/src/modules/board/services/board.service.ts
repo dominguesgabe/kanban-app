@@ -12,6 +12,7 @@ import { User } from 'src/modules/user/entities/user.entity';
 import { UserBoard } from 'src/modules/user-board/entities/user-board.entity';
 import { UserBoardsRepository } from 'src/modules/user-board/repositories/user-boards.repository';
 import { UpdateBoardDTO } from '../dto/update-board.dto';
+import { BoardDTO } from '../dto/get-board.dto';
 
 interface CreateProps {
   createBoardDTO: CreateBoardDTO;
@@ -75,13 +76,14 @@ export class BoardsService {
     return boards;
   }
 
+  //refactor: broke method into validate and find
   async findByIdAndValidateUser({
     boardId,
     userId,
-  }: FindByIdProps): Promise<Board> {
+  }: FindByIdProps): Promise<BoardDTO> {
     const board = await this.boardsRepository.findOne({
       where: { id: boardId },
-      // relations: [''],
+      relations: ['userBoards', 'userBoards.user', 'columns', 'columns.tasks'],
     });
 
     const allowedBoard = board.userBoards.filter(
@@ -94,8 +96,27 @@ export class BoardsService {
       );
     }
 
+    const columns = board.columns.map((column) => ({
+      id: column.id,
+      name: column.name,
+    }));
+
+    const tasks = board.columns.flatMap((column) =>
+      column.tasks.map((task) => ({
+        id: task.id,
+        name: task.name,
+        description: task.description,
+        position: task.position,
+        priority: task.priority,
+        columnId: column.id,
+      })),
+    );
+
     return {
-      ...board,
+      columns,
+      tasks,
+      id: board.id,
+      name: board.name,
       userBoards: allowedBoard,
     };
   }

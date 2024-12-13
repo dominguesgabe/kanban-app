@@ -1,5 +1,4 @@
 import { KanbanBoard } from "@/src/components";
-import { cookies } from "next/headers";
 
 interface IParams {
   boardId: string[];
@@ -7,10 +6,8 @@ interface IParams {
 
 export default async function BoardPage({ params }: { params: IParams }) {
   const { boardId } = await params;
-  const requestCookies = await cookies();
 
   return (
-
-    <KanbanBoard boardId={boardId} />
+    <KanbanBoard boardId={boardId[0]} />
   );
 }

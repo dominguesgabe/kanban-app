@@ -1,6 +1,6 @@
 "use client"
 
-import { TaskCardProps, TaskDragData } from "@/src/types";
+import { ColumnTask, TaskDragData } from "@/src/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
@@ -8,6 +8,11 @@ import { Task, TaskContent, TaskHeader } from "../Task";
 import { Button } from "../../Button";
 import { GripVertical } from "lucide-react";
 import { Badge } from "../Badge";
+
+export interface TaskCardProps {
+  task: ColumnTask;
+  isOverlay?: boolean;
+}
 
 export function TaskCard({ task, isOverlay }: TaskCardProps) {
   const {
@@ -18,7 +23,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     transition,
     isDragging,
   } = useSortable({
-    id: task.id,
+    id: `task-${task.id}`,
     data: {
       type: "task",
       task,
@@ -52,7 +57,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     >
       <TaskHeader className="px-3 py-3 flex items-center justify-between flex-row border-b-2 border-secondary relative">
         <span className="font-semibold">
-          Task title
+          {task.name}
         </span>
         <Button
           variant={"ghost"}
@@ -64,10 +69,10 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         </Button>
       </TaskHeader>
       <TaskContent className="px-3 pt-3 pb-6 text-left whitespace-pre-wrap">
-        {task.content}
+        {task.description}
       </TaskContent>
-      <Badge variant={"high"}>
-        Medium
+      <Badge variant={task.priority}>
+        {task.priority}
       </Badge>
     </Task>
   );
