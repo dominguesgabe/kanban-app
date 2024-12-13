@@ -22,7 +22,6 @@ export const useLogin = () => {
     resolver: zodResolver(formLoginSchema),
   });
 
-  console.log(errors);
   async function mutationFn(formData: formLoginType) {
     const { data } = await api.post<LoginFormResponse>(
       ApiRoute.login,
@@ -43,7 +42,6 @@ export const useLogin = () => {
     },
     onSuccess: ({ accessToken }) => {
       Cookies.set("auth-token", `Bearer ${accessToken}`, { expires: 1 });
-      console.log("coe");
       router.replace(Route.home);
     },
   });
