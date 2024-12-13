@@ -1,7 +1,7 @@
-import { KanbanBoard } from "@/src/components";
+
 
 export default function Home() {
   return (
-    <KanbanBoard />
+    <h1>Welcome fulano, select one of your boards</h1>
   );
 }

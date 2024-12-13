@@ -81,7 +81,7 @@ export class BoardsService {
   }: FindByIdProps): Promise<Board> {
     const board = await this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ['userBoards', 'userBoards.user'],
+      // relations: [''],
     });
 
     const allowedBoard = board.userBoards.filter(

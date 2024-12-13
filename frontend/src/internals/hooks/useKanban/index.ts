@@ -12,7 +12,10 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { api } from "../../adapters/api";
+import { ApiRoute, BoardColumn } from "../../enums";
 
 const defaultCols = [
   {
@@ -99,7 +102,19 @@ const exampleTasks: ITask[] = [
   },
 ];
 
-export const useKanban = () => {
+export const useKanban = ({ boardId }: { boardId: number }) => {
+  async function getBoard({ boardId }: { boardId: number }) {
+    const { data } = await api.get<BoardColumn[]>(
+      `${ApiRoute.columns}/${boardId}`
+    );
+    return data;
+  }
+
+  const { data: board, isLoading: isLoadingBoard } = useQuery({
+    queryKey: ["board", boardId],
+    queryFn: () => getBoard({ boardId }),
+  });
+
   const [columns, setColumns] = useState<Column[]>(() => defaultCols);
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
