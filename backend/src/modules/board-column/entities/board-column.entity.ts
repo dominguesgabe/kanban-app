@@ -23,5 +23,5 @@ export class BoardColumn {
   board: Board;
 
   @OneToMany(() => ColumnItem, (columnItem) => columnItem.column)
-  columnItems: ColumnItem[];
+  tasks: ColumnItem[];
 }

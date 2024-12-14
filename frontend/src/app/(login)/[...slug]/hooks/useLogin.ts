@@ -3,12 +3,12 @@ import { api } from "@/src/internals/adapters/api";
 import { ApiRoute, Route } from "@/src/internals/enums";
 import { useToast } from "@/src/internals/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { formLoginSchema, formLoginType, LoginFormResponse } from "../types";
+import { useMutation } from "react-query";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -22,7 +22,6 @@ export const useLogin = () => {
     resolver: zodResolver(formLoginSchema),
   });
 
-  console.log(errors);
   async function mutationFn(formData: formLoginType) {
     const { data } = await api.post<LoginFormResponse>(
       ApiRoute.login,
@@ -31,7 +30,7 @@ export const useLogin = () => {
     return data;
   }
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn,
     onError: (error: AxiosError) => {
       const axiosError = (error.response?.data as { message: string }) || error;
@@ -43,7 +42,6 @@ export const useLogin = () => {
     },
     onSuccess: ({ accessToken }) => {
       Cookies.set("auth-token", `Bearer ${accessToken}`, { expires: 1 });
-      console.log("coe");
       router.replace(Route.home);
     },
   });
@@ -57,6 +55,6 @@ export const useLogin = () => {
     handleSubmit,
     onSubmit,
     errors,
-    isPending,
+    isLoading,
   };
 };

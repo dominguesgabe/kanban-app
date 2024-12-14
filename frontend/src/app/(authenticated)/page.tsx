@@ -1,6 +1,7 @@
 
+
 export default function Home() {
   return (
-    <div>hello world</div>
+    <h1>Welcome fulano, select one of your boards</h1>
   );
 }

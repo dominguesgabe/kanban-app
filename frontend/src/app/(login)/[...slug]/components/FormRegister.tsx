@@ -12,7 +12,7 @@ export function FormRegister() {
     handleSubmit,
     onSubmit,
     errors,
-    isPending
+    isLoading
   } = useRegister()
 
   return (
@@ -56,7 +56,7 @@ export function FormRegister() {
           type="submit"
           className="bg-cyan-500 hover:bg-cyan-400 transition text-white p-2 rounded font-semibold"
         >
-          {isPending ? "Loading..." : "Register"}
+          {isLoading ? "Loading..." : "Register"}
         </button>
       </form>
       <Link

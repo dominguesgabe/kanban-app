@@ -1,3 +1,4 @@
+import { BoardColumn } from 'src/modules/board-column/entities/board-column.entity';
 import { UserBoard } from 'src/modules/user-board/entities/user-board.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import {
@@ -24,4 +25,9 @@ export class Board {
 
   @OneToMany(() => UserBoard, (userBoard) => userBoard.board, { cascade: true })
   userBoards: UserBoard[];
+
+  @OneToMany(() => BoardColumn, (boardColumn) => boardColumn.board, {
+    cascade: true,
+  })
+  columns: BoardColumn[];
 }

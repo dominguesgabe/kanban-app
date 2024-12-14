@@ -11,7 +11,7 @@ export function FormLogin() {
     handleSubmit,
     onSubmit,
     errors,
-    isPending
+    isLoading
   } = useLogin()
 
   return (
@@ -45,7 +45,7 @@ export function FormLogin() {
           type="submit"
           className="bg-cyan-500 hover:bg-cyan-400 transition text-white p-2 rounded font-semibold"
         >
-          {isPending ? "Loading..." : "Login"}
+          {isLoading ? "Loading..." : "Login"}
         </button>
       </form>
       <Link

@@ -3,11 +3,11 @@ import { api } from "@/src/internals/adapters/api";
 import { ApiRoute, Route } from "@/src/internals/enums";
 import { useToast } from "@/src/internals/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { formRegisterSchema, formRegisterType } from "../types";
+import { useMutation } from "react-query";
 
 export const useRegister = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ export const useRegister = () => {
     return data;
   }
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn,
     onError: (error: AxiosError) => {
       const axiosError = (error.response?.data as { message: string }) || error;
@@ -54,6 +54,6 @@ export const useRegister = () => {
     handleSubmit,
     onSubmit,
     errors,
-    isPending,
+    isLoading,
   };
 };

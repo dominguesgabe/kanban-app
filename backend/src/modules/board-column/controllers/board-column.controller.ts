@@ -28,11 +28,11 @@ export class BoardColumnsController {
     return this.boardColumnsService.create(createBoardColumnDTO);
   }
 
-  @UseGuards(AuthGuard)
-  @Get(':boardId')
-  async findAll(@Param() boardId: { boardId: number }): Promise<BoardColumn[]> {
-    return this.boardColumnsService.findAll(boardId);
-  }
+  // @UseGuards(AuthGuard)
+  // @Get(':boardId')
+  // async findAll(@Param() boardId: { boardId: number }): Promise<BoardColumn[]> {
+  //   return this.boardColumnsService.findAll(boardId);
+  // }
 
   @UseGuards(AuthGuard)
   @Patch(':id')
