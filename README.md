@@ -28,6 +28,7 @@
 cd backend
 npm install
 npm run migrate:run
+npm run build
 npm start
 ```
 
@@ -36,10 +37,11 @@ npm start
 ```
 cd frontend
 npm install
+npm run build
 npm start
 ```
 
-Access [localhost:5173](http://localhost:5173)
+Access [localhost:5173](http://localhost:3001/)
 
 ---
 

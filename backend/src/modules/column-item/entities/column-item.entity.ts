@@ -1,5 +1,11 @@
 import { BoardColumn } from 'src/modules/board-column/entities/board-column.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Priority } from '../enums';
 
 @Entity()
@@ -22,6 +28,6 @@ export class ColumnItem {
   })
   priority: Priority;
 
-  @ManyToOne(() => BoardColumn, (boardColumn) => boardColumn.columnItems)
+  @ManyToOne(() => BoardColumn, (boardColumn) => boardColumn.tasks)
   column: BoardColumn;
 }

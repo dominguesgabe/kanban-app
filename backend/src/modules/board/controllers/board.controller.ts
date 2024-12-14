@@ -16,6 +16,7 @@ import { CreateBoardDTO } from '../dto';
 import { Board } from '../entities/board.entity';
 import { BoardsService } from '../services/board.service';
 import { UpdateBoardDTO } from '../dto/update-board.dto';
+import { BoardDTO } from '../dto/get-board.dto';
 
 @Controller('boards')
 export class BoardsController {
@@ -41,7 +42,7 @@ export class BoardsController {
   findByIdAndValidateUser(
     @Request() req,
     @Param() { id }: { id: number },
-  ): Promise<Board> {
+  ): Promise<BoardDTO> {
     return this.boardsService.findByIdAndValidateUser({
       boardId: id,
       userId: req.user.sub,

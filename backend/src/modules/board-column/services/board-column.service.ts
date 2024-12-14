@@ -34,14 +34,14 @@ export class BoardColumnsService {
     return await this.boardColumnRepository.save(boardColumn);
   }
 
-  async findAll({ boardId }: { boardId: number }): Promise<BoardColumn[]> {
-    const columns = await this.boardColumnRepository.find({
-      where: { board: { id: boardId } },
-      relations: ['board', 'columnItems'],
-    });
+  // async findAll({ boardId }: { boardId: number }): Promise<BoardColumn[]> {
+  //   const columns = await this.boardColumnRepository.find({
+  //     where: { board: { id: boardId } },
+  //     relations: ['board', 'columnItems'],
+  //   });
 
-    return columns;
-  }
+  //   return columns;
+  // }
 
   findOne(id: number): Promise<BoardColumn | null> {
     return this.boardColumnRepository.findOneBy({ id });
