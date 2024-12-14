@@ -41,7 +41,7 @@ npm run build
 npm start
 ```
 
-Access [localhost:5173](http://localhost:5173)
+Access [localhost:5173](http://localhost:3001/)
 
 ---
 
